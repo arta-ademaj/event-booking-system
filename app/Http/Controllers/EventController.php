@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Services\EventService;
 
 class EventController extends Controller
 {
+
+    protected $eventService;
+
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = $this->eventService->getAllEvents();
+        return response()->json($events);
     }
 
     /**
@@ -35,7 +46,8 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = $this->eventService->createEvent($request);
+        return response()->json($event, 201);
     }
 
     /**
@@ -69,7 +81,8 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $event = $this->eventService->updateEvent($request, $event->id);
+        return $event;
     }
 
     /**
@@ -80,6 +93,19 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        $deletedEvent = $this->eventService->deleteEvent($event->id);
+    
+        if (!$deletedEvent) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event not found or could not be deleted',
+            ], 404);
+        }
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Event deleted successfully',
+        ], 200);
     }
+    
 }
