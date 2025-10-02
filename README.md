@@ -1,64 +1,176 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Event Booking System (backend).
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful PHP API built with Laravel for event booking system.
+This is a Laravel-based RESTful API for managing **users, events, tickets, bookings, and payments**.  
+It uses **Laravel Sanctum** for authentication and implements **role-based access control (RBAC)** for different user roles.
+---
 
-## About Laravel
+## 🚀 Technologies Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **PHP 7.4.19**
+- **Laravel 8.83.29**
+- **MySQL 8+**
+- **Composer**
+- **Postman** (for testing API endpoints)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Features
+- User authentication (Register, Login, Logout) using Laravel Sanctum
+- Role-based access:
+  - **Admin**: Manage all events, tickets, bookings
+  - **Organizer**: Manage only their own events and tickets
+  - **Customer**: Book tickets & view their own bookings
+- Events CRUD (Create, Read, Update, Delete)
+- Database seeding with sample data
+- Feature & Unit tests with PHPUnit
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Setup Instructions
 
-## Laravel Sponsors
+### 1. Clone the Repository
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+git clone https://github.com/arta-ademaj/event-booking-system.git
+cd event-booking-system
+```
 
-### Premium Partners
+### 2. Install Dependencies
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
+composer install
+```
 
-## Contributing
+### 3. Create `.env` File
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Edit `.env` with your DB credentials:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=event_booking_app
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Security Vulnerabilities
+### 4. Create Database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Create a database named `event_booking_app` (or the one you specified in `.env`) in MySQL:
 
-## License
+```
+CREATE DATABASE event_booking_app;
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Run Migrations and Seeders
+
+This project uses Laravel migrations to create both the database schema. Run the following command:
+
+```
+php artisan migrate
+```
+
+This will:
+- Create the `users` table
+- Create the `events` table
+- Create the `tickets` table
+- Create the `bookings` table
+- Create the `payments` table
+---
+
+This project uses Laravel migrations to create both the database schema and seed initial data. Run the following commands:
+
+```bash
+php artisan migrate --seed
+
+
+
+### 6. Clear and Cache Configuration (Optional)
+
+After updating your `.env` or configuration files, run:
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan config:cache
+php artisan route:clear
+```
+
+### 3. Access the App
+
+Visit: [http://localhost:8000](http://localhost:8000)
+
+---
+
+
+## Authentication & Authorization
+
+This project uses **Laravel Sanctum** for API authentication and role-based access control.
+
+### Authentication (Sanctum)
+
+- **Register**  
+  `POST /api/register`  
+  Create a new user (Admin, Organizer, or Customer).  
+
+- **Login**  
+  `POST /api/login`  
+  Returns an access token that must be sent in the `Authorization` header for all protected requests. 
+
+  - **Logout**  
+  `POST /api/logout`  
+  Revokes the currently authenticated user's token.
+
+    curl -X POST http://your-app.test/api/events \
+    -H "Authorization: Bearer <token>" \
+    -H "Content-Type: application/json" \
+    -d '{
+            "title": "Laravel Conference",
+            "description": "Best practices with Laravel",
+            "date": "2025-12-01",
+            "location": "Prishtina",
+            "created_by": 1
+        }'
+        
+## 📬 API Endpoints (Example Requests)
+
+
+All requests use the base URL: `http://localhost:8000/api`
+
+### ➕ ENDPOINTS
+
+**GET** `/api/events` 
+**POST** `/api/events`
+**PUT** `/api/events/1`  
+**DELETE** `/api/events/1` 
+**POST** `/api/register` 
+**POST** `/api/login` 
+**POST** `/api/logout` 
+
+----
+
+## 🧪 Testing the API
+
+You can test the API using:
+
+- [Postman](https://www.postman.com/)
+- CURL
+- Frontend client
+
+Example with CURL:
+
+```
+curl -X GET http://localhost:8000/api/events
+```
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
